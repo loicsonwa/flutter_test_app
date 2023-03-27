@@ -57,9 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCubit.setSortIndex(0);
                   }
                 },
-                icon: Icon(state.sortIndex == 0 ? MdiIcons
-                    .sortAlphabeticalDescending : MdiIcons
-                    .sortAlphabeticalAscending),
+                icon: Icon(state.sortIndex == 0
+                    ? MdiIcons.sortAlphabeticalDescending
+                    : MdiIcons.sortAlphabeticalAscending),
               );
             },
           ),
@@ -67,8 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () =>
-            BlocProvider.of<ItemCubit>(context).getItemList(1, true),
+        onRefresh: () => onRefresh(),
         child: BlocBuilder<ItemCubit, ItemState>(
           builder: (context, state) {
             return SingleChildScrollView(
@@ -78,95 +77,98 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   state.itemList != null
                       ? state.itemList!.isNotEmpty
-                      ? GridView.builder(
-                    key: UniqueKey(),
-                    gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
-                      mainAxisSpacing: 0.01,
-                      childAspectRatio: .8,
-                      crossAxisCount: 2,
-                    ),
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.PADDING_SIZE_SMALL,
-                      vertical: 0,
-                    ),
-                    itemCount: state.itemList!.length,
-                    itemBuilder: (context, index) =>
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: Dimensions.PADDING_SIZE_EXTRA_LARGE),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.DETAIL_PAGE,
-                                arguments: DetailScreenArgs(
-                                  selectedItem: state.itemList![index],
-                                ),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Stack(
+                          ? GridView.builder(
+                              key: UniqueKey(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
+                                mainAxisSpacing: 0.01,
+                                childAspectRatio: .8,
+                                crossAxisCount: 2,
+                              ),
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.PADDING_SIZE_SMALL,
+                                vertical: 0,
+                              ),
+                              itemCount: state.itemList!.length,
+                              itemBuilder: (context, index) => Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom:
+                                        Dimensions.PADDING_SIZE_EXTRA_LARGE),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.DETAIL_PAGE,
+                                      arguments: DetailScreenArgs(
+                                        selectedItem: state.itemList![index],
+                                      ),
+                                    );
+                                  },
+                                  child: Column(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(0.0),
-                                        child: Hero(
-                                          tag: state.itemList![index].id,
-                                          transitionOnUserGestures: true,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(
-                                                    10),
-                                                image: DecorationImage(
-                                                  image:
-                                                  CachedNetworkImageProvider(
-                                                      state
-                                                          .itemList![
-                                                      index]
-                                                          .url),
-                                                  fit: BoxFit.cover,
-                                                )),
-                                          ),
+                                      Expanded(
+                                        child: Stack(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(0.0),
+                                              child: Hero(
+                                                tag: state.itemList![index].id,
+                                                transitionOnUserGestures: true,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      image: DecorationImage(
+                                                        image:
+                                                            CachedNetworkImageProvider(
+                                                                state
+                                                                    .itemList![
+                                                                        index]
+                                                                    .url),
+                                                        fit: BoxFit.cover,
+                                                      )),
+                                                ),
+                                              ),
+                                            ),
+                                            const Positioned(
+                                              right: 16,
+                                              bottom: 16,
+                                              child: Icon(
+                                                Icons.arrow_forward_outlined,
+                                                color: white,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      const Positioned(
-                                        right: 16,
-                                        bottom: 16,
-                                        child: Icon(
-                                          Icons.arrow_forward_outlined,
-                                          color: white,
-                                        ),
+                                      const SizedBox(
+                                        height: 5,
                                       ),
+                                      Text(
+                                        state.itemList![index].title,
+                                        style: prodMedium,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 5,),
-                                Text(
-                                  state.itemList![index].title,
-                                  style: prodMedium,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                  )
-                      : Expanded(
-                    child: Center(
-                      child: Text(
-                        'No item found, sorry !',
-                        style: prodMedium.copyWith(
-                            fontSize: Dimensions.fontSizeExtraLarge),
-                      ),
-                    ),
-                  )
+                              ),
+                            )
+                          : Expanded(
+                              child: Center(
+                                child: Text(
+                                  'No item found, sorry !',
+                                  style: prodMedium.copyWith(
+                                      fontSize: Dimensions.fontSizeExtraLarge),
+                                ),
+                              ),
+                            )
                       : ItemShimmer(isEnabled: state.itemList == null),
                   state.isLoading!
                       ? ItemShimmer(isEnabled: state.itemList == null)
@@ -188,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent &&
+              scrollController.position.maxScrollExtent &&
           itemCubit.state.itemList != null &&
           !itemCubit.state.isLoading!) {
         int pageSize = (itemCubit.state.pageSize! / 10).ceil();
@@ -201,5 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     });
+  }
+
+  Future<void> onRefresh() async {
+    BlocProvider.of<ItemCubit>(context).getItemList(1, true);
   }
 }
