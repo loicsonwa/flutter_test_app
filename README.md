@@ -4,7 +4,7 @@
  How to install:
  - Donwload the project
  - Open Command Tool ou Terminal and access the projet root directory
- Enter following commands : 
+ - Enter following commands : 
  - flutter get
  - flutter pub run build_runner build --delete-conflicting-outputs
  - flutter run
